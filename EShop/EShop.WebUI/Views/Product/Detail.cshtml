@@ -1,0 +1,49 @@
+﻿
+@model ProductDetailViewModel
+<div class="row mt-5">
+
+
+    <div class="col-8 offset-2">
+
+
+        <div class="card mb-3" style="max-width: 840px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ImagePath))
+                    {
+                        <img src="~/images/products/@Model.ImagePath" class="img-fluid rounded-start" alt="...">
+                    }
+                    else
+                    {
+                        <img src="~/images/noImage.jpg" class="img-fluid rounded-start" alt="...">
+                    }
+
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.ProductName</h5>
+                        
+                        <p class="card-text">@Model.Description</p>
+                        <p class="card-text fw-bold">Ürün Fiyatı : @Model.UnitPrice TL </p>
+
+                        @if (Model.UnitInStock < 3)
+                        {
+                            <div class="alert alert-danger">
+                                Son Ürünler!
+                            </div>
+                        }
+
+                        <a style="text-decoration:none" asp-controller="Home" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-categoryName="@Model.CategoryName" class="card-text"><small class="text-body-secondary">@Model.CategoryName</small></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+</div>

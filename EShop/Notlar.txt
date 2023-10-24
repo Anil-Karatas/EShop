@@ -1,0 +1,7 @@
+
+1) WebUI Business metotlarý kullanýr. Data'da businesi kullanýr.
+	Bundan dolayý WebUý Businesi, Businessii dataya referans verecegiz.
+			EShop-> Add -> ProjectReferans
+			EShopBusiness ->Add -> Project Refeerans olarak projeleri birbirine göre tanýmlýyoruz.
+
+

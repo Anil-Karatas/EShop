@@ -1,0 +1,93 @@
+﻿
+@model ProductFormViewModel
+
+<div class="row">
+
+    <div class="col-8 offset-2">
+
+        <div class="card" style="border:solid 2px">
+
+            <div class="card-header fw-bold fs-5">
+                Ürün Formu
+            </div>
+
+            <div class="card-body">
+
+
+                <form method="post" asp-area="Admin" asp-controller="Product" asp-action="Save" enctype="multipart/form-data">
+
+                    @*Dosya taşıyorsak enctype eklemeliyiz!. *@
+
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+                    {
+                            <div class="alert alert-danger">
+                            @ViewBag.ErrorMessage
+                            </div>
+                    }
+
+                    <input asp-for="Id" type="hidden" />
+                   
+
+                    <div class="mb-2">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" type="text" class="form-control" />
+                        <span class="text-danger fw-bold mt-1"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="Description"></label>
+                        <input asp-for="Description" type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="UnitPrice"></label>
+                        <input asp-for="UnitPrice" type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="UnitInStock"></label>
+                        <input asp-for="UnitInStock" type="number" class="form-control" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="CategoryId"></label>
+                        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id" , "Name"))" class="form-control">
+                            <option selected disabled>Seçiniz</option>
+                        </select>
+                    </div>
+
+
+                    <div class="mb-2">
+                        <label asp-for="File"></label>
+                        <br/>
+
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.ImagePath))
+                        {
+                            <img width="125" height="125" src="~/images/products/@ViewBag.ImagePath" />
+                        }
+
+                        <input  type="file" asp-for="File" class="form-control"/>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.FileError))
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.FileError
+                        </div>
+                    }
+
+                    <button type="submit" class="btn btn-success mt-3 float-end">Formu Gönder</button>
+
+
+                </form>
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+</div>

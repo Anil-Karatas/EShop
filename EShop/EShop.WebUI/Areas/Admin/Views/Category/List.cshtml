@@ -1,0 +1,72 @@
+﻿@model List<CategoryListViewModel>
+<div>
+    <div class="float-start"><h2>Kategoriler</h2></div>
+    <div class="float-end"><a asp-area="Admin" asp-controller="Category" asp-action="New" class="btn btn-primary">Yeni Kategori</a></div>
+</div>
+<div style="padding-top:75px;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kategori Adı</th>
+                <th>Aksiyonlar</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <th>@item.Name</th>
+                    <th>@item.Description</th>
+                    <td>
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Düzenle</a>    
+                        <a asp-area="Admin" asp-asp-controller="Category" asp-action="Delete" class="btn btn-sm btn-danger btnCategoryDelete" data-id="@item.Id" > Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+                @section Scripts{
+                    <script>
+        $('.btnCategoryDelete').click(function (e) {
+            e.preventDefault(); // linkin yönlendirme işlemini engelledim. yani Url'e # atmıyor böylelikle sayfa yukarıya kaymıyor.
+            var categoryId = $(this).data('id'); // data-id olarak atanan alandaki veriyi tutar
+
+            @*https://sweetalert2.github.io/ *@
+
+
+            Swal.fire({
+                title: 'Emin misin?',
+                text: "Dikkat! Kategori Silinecektir. Bu Kategoriye Bağlı Ürünlerde Silinecektir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, Onaylıyorum!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/category/delete/' + categoryId,
+                        method: 'GET' // Url üzerinden istek attım
+                    }).done(function () {
+                        Swal.fire(
+                            'Silindi!',
+                            'Kategori Başarı ile Silindi.',
+                            'success'
+                        ).then(() => { window.location.reload() })  // burası javascriptte sayfayı yenilemek için yazıldı.
+                    }).fail(function () {
+                        Swal.fire(
+                            'Hata!',
+                            'Kategori Silinirken Hata ile  Karşılaşıldı. Silme İşlemi Gerçekleştirilemedi.',
+                            'error'
+                        )
+                    })
+
+                }
+            })
+        })
+                    </script>
+                }

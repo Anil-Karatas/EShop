@@ -1,0 +1,115 @@
+﻿@*// datatables
+//cdnjs *@
+
+
+@model List<ProductListViewModel>
+<div>
+    <div class="float-start"><h2>ÜRÜNLER</h2></div>
+    <div class="float-end"><a asp-area="Admin" asp-controller="Product" asp-action="New" class="btn btn-primary">Yeni Ürün</a></div>
+</div>
+
+<div style="padding-top:75px">
+
+    <table id="productTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Ürün Adı</th>
+                <th>Birim Fiyatı</th>
+                <th>Stok Miktarı</th>
+                <th>Kategori</th>
+                <th></th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(item.ImagePath))
+                        {
+                            
+                            <img src="~/images/noImage.jpg" width="155" height="155" />
+                            
+                        }
+                        else
+                        {
+                            <a href="~/images/products/@item.ImagePath" data-lightbox="image-1" data-title="My Caption">
+                                <img src="~/images/products/@item.ImagePath" data-lightbox="roadtrip "width="155" height="155" />
+                            </a>
+                        }
+                    </td>
+
+                    <td>@item.Name</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@item.UnitInStock</td>
+                    <td>@item.CategoryName</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-area="Admin" asp-asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id">
+                            Düzenle
+                        </a>
+                        <a class="btn btn-sm btn-danger btnDelete" data-id="@item.Id">
+                            Sil
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+        </table>
+        </div>
+
+        @section Scripts{
+            <script>
+                var table=new DataTable('#productTable',{
+                    language:{
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+                    },
+                    pageLength:3
+                });
+        $('.btnDelete').click(function (e) {
+            e.preventDefault(); // linkin yönlendirme işlemini engelledim. yani Url'e # atmıyor böylelikle sayfa yukarıya kaymıyor.
+            var productId = $(this).data('id'); // data-id olarak atanan alandaki veriyi tutar
+
+            //https://sweetalert2.github.io/ //
+
+
+            Swal.fire({
+                title: 'Emin misin?',
+                text: "Dikkat! Ürün Silinecektir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, Onaylıyorum!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/product/delete/' + productId,
+                        method: 'GET' // Url üzerinden istek attım
+                    }).done(function () {
+                        Swal.fire(
+                            'Silindi!',
+                            'Ürün Başarı ile Silindi.',
+                            'success'
+                        ).then(() => { window.location.reload() })  // burası javascriptte sayfayı yenilemek için yazıldı.
+                    }).fail(function () {
+                        Swal.fire(
+                            'Hata!',
+                            'Ürün Silinirken Hata ile  Karşılaşıldı. Silme İşlemi Gerçekleştirilemedi.',
+                            'error'
+                        )
+                    })
+
+                }
+            })
+        })
+
+
+            </script>
+        }
+           
+  
